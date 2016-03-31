@@ -1,0 +1,86 @@
+cmake_minimum_required(VERSION 3.3)
+
+project(no-shadow CXX)
+set(PROJECT_VERSION "0.1")
+
+### I have compiled clang myself here.
+# TODO: Fix for general installations
+
+set(LLVM_SRC_DIR "${PROJECT_SOURCE_DIR}/llvm_src")
+set(CLANG_SRC_DIR "${LLVM_SRC_DIR}/tools/clang")
+set(LLVM_BUILD_DIR "${PROJECT_SOURCE_DIR}/llvm_build")
+set(CLANG_BUILD_DIR "${LLVM_BUILD_DIR}/tools/clang")
+include_directories(
+  "${LLVM_SRC_DIR}/include"
+  "${CLANG_SRC_DIR}/include"
+  "${LLVM_BUILD_DIR}/include"
+  "${CLANG_BUILD_DIR}/include"
+  )
+link_directories(
+  "${LLVM_BUILD_DIR}/lib"
+  )
+set(llvm-config ${LLVM_BUILD_DIR}/bin/llvm-config)
+
+## Set compiler flags flags from `llvm-config --cxxflags`
+execute_process(
+  COMMAND ${llvm-config} --cxxflags
+  OUTPUT_VARIABLE llvm_config_cxxflags
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${llvm_config_cxxflags}")
+
+add_library(${PROJECT_NAME}
+  SHARED "PrintFunctionNames.cpp"
+  )
+
+## Set linker flags from `llvm-config --system-libs`
+execute_process(
+  COMMAND ${llvm-config} --system-libs
+  OUTPUT_VARIABLE llvm_config_system_libs
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${llvm_config_system_libs}")
+message(STATUS ${CMAKE_SHARED_LINKER_FLAGS})
+
+## Manually add loads of libraries.
+# There should be a better way of doing this. `llvm-config --libs seems to only
+# include the LLVM*-libraries
+target_link_libraries(${PROJECT_NAME}
+  LLVMX86CodeGen
+  LLVMX86AsmParser
+  LLVMX86Disassembler
+  LLVMExecutionEngine
+  LLVMAsmPrinter
+  LLVMSelectionDAG
+  LLVMX86AsmPrinter
+  LLVMX86Info
+  LLVMMCParser
+  LLVMCodeGen
+  LLVMX86Utils
+  LLVMScalarOpts
+  LLVMInstCombine
+  LLVMTransformUtils
+  LLVMAnalysis
+  LLVMTarget
+  LLVMCore
+  LLVMMC
+  LLVMSupport
+  LLVMBitReader
+  LLVMOption
+  clang
+  clangFrontend
+  clangAST
+  clangAnalysis
+  clangBasic
+  clangCodeGen
+  clangDriver
+  clangFrontendTool
+  clangLex
+  clangParse
+  clangSema
+  clangEdit
+  clangSerialization
+  clangStaticAnalyzerCheckers
+  clangStaticAnalyzerCore
+  clangStaticAnalyzerFrontend
+  )
