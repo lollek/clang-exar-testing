@@ -60,41 +60,19 @@ endif()
 # There should be a better way of doing this. `llvm-config --libs seems to only
 # include the LLVM*-libraries
 target_link_libraries(${PROJECT_NAME}
-  LLVMX86CodeGen
-  LLVMX86AsmParser
-  LLVMX86Disassembler
-  LLVMExecutionEngine
-  LLVMAsmPrinter
-  LLVMSelectionDAG
-  LLVMX86AsmPrinter
-  LLVMX86Info
   LLVMMCParser
-  LLVMCodeGen
-  LLVMX86Utils
-  LLVMScalarOpts
-  LLVMInstCombine
-  LLVMTransformUtils
-  LLVMAnalysis
-  LLVMTarget
-  LLVMCore
   LLVMMC
   LLVMSupport
   LLVMBitReader
   LLVMOption
-  clang
   clangFrontend
   clangAST
   clangAnalysis
   clangBasic
-  clangCodeGen
   clangDriver
-  clangFrontendTool
   clangLex
   clangParse
   clangSema
   clangEdit
   clangSerialization
-  clangStaticAnalyzerCheckers
-  clangStaticAnalyzerCore
-  clangStaticAnalyzerFrontend
   )
