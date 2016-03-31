@@ -79,9 +79,9 @@ public:
 class PrintFunctionNamesAction : public PluginASTAction {
   std::set<std::string> ParsedTemplates;
 protected:
-  std::unique_ptr<ASTConsumer> CreateASTConsumer(CompilerInstance &CI,
+  ASTConsumer* CreateASTConsumer(CompilerInstance &CI,
                                                  llvm::StringRef) override {
-    return llvm::make_unique<PrintFunctionsConsumer>(CI, ParsedTemplates);
+    return new PrintFunctionsConsumer(CI, ParsedTemplates);
   }
 
   bool ParseArgs(const CompilerInstance &CI,

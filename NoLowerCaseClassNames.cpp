@@ -19,8 +19,8 @@ public:
 
 class LocalASTAction : public PluginASTAction {
 public:
-  unique_ptr<ASTConsumer> CreateASTConsumer(CompilerInstance &CI, llvm::StringRef) override {
-    return llvm::make_unique<LocalConsumer>();
+  ASTConsumer* CreateASTConsumer(CompilerInstance &CI, llvm::StringRef) override {
+    return new LocalConsumer();
   }
 
   bool ParseArgs(CompilerInstance const& CI, vector<string> const& args) override {
