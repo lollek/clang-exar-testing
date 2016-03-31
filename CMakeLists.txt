@@ -5,7 +5,6 @@ set(PROJECT_VERSION "0.1")
 
 ### I have compiled clang myself here.
 # TODO: Fix for general installations
-
 set(LLVM_SRC_DIR "${PROJECT_SOURCE_DIR}/llvm_src")
 set(CLANG_SRC_DIR "${LLVM_SRC_DIR}/tools/clang")
 set(LLVM_BUILD_DIR "${PROJECT_SOURCE_DIR}/llvm_build")
@@ -19,7 +18,14 @@ include_directories(
 link_directories(
   "${LLVM_BUILD_DIR}/lib"
   )
-set(llvm-config ${LLVM_BUILD_DIR}/bin/llvm-config)
+
+
+## Set llvm-config
+find_program(llvm-config
+  NAMES llvm-config
+  )
+# TODO: Make it possible to set manually
+#set(llvm-config ${LLVM_BUILD_DIR}/bin/llvm-config)
 
 ## Set compiler flags flags from `llvm-config --cxxflags`
 execute_process(
@@ -28,6 +34,9 @@ execute_process(
   OUTPUT_STRIP_TRAILING_WHITESPACE
   )
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${llvm_config_cxxflags}")
+if (llvm_config_cxxflags STREQUAL "")
+  message(FATAL_ERROR "No CMAKE_CXX_FLAGS generated")
+endif()
 
 add_library(${PROJECT_NAME}
   SHARED "PrintFunctionNames.cpp"
@@ -40,7 +49,9 @@ execute_process(
   OUTPUT_STRIP_TRAILING_WHITESPACE
   )
 set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${llvm_config_system_libs}")
-message(STATUS ${CMAKE_SHARED_LINKER_FLAGS})
+if (llvm_config_system_libs STREQUAL "")
+  message(FATAL_ERROR "No CMAKE_SHARED_LINKER_FLAGS generated")
+endif()
 
 ## Manually add loads of libraries.
 # There should be a better way of doing this. `llvm-config --libs seems to only
