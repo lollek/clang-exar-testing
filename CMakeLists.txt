@@ -38,8 +38,9 @@ if (llvm_config_cxxflags STREQUAL "")
   message(FATAL_ERROR "No CMAKE_CXX_FLAGS generated")
 endif()
 
-add_library(${PROJECT_NAME}
-  SHARED "PrintFunctionNames.cpp"
+add_library(${PROJECT_NAME} SHARED
+  PrintFunctionNames.cpp
+  NoLowerCaseClassNames.cpp
   )
 
 ## Set linker flags from `llvm-config --system-libs`
