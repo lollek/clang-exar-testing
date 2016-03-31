@@ -1,3 +1,8 @@
+class GadName {
+public:
+  int data;
+};
+
 class badName {
 public:
   int data;
@@ -6,5 +11,7 @@ public:
 int main() {
   badName obj;
   obj.data = 52;
-  return obj.data;
+  GadName obj2;
+  obj2.data = obj.data;
+  return obj2.data;
 }
