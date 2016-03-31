@@ -23,7 +23,7 @@ public:
     return llvm::make_unique<LocalConsumer>();
   }
 
-  bool ParseArgs(CompilerInstance const& CI, vector<string> const& args) {
+  bool ParseArgs(CompilerInstance const& CI, vector<string> const& args) override {
     return true;
   }
 };
