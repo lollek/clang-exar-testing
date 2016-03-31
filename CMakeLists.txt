@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.3)
 
-project(no-shadow CXX)
+project(exar CXX)
 set(PROJECT_VERSION "0.1")
 
 ### I have compiled clang myself here.
@@ -23,9 +23,11 @@ link_directories(
 ## Set llvm-config
 find_program(llvm-config
   NAMES llvm-config
+  PATHS "${LLVM_BUILD_DIR}/bin"
   )
-# TODO: Make it possible to set manually
-#set(llvm-config ${LLVM_BUILD_DIR}/bin/llvm-config)
+if(NOT EXISTS "${llvm-config}")
+  message(FATAL_ERROR "Could not find llvm-config")
+endif()
 
 ## Set compiler flags flags from `llvm-config --cxxflags`
 execute_process(
@@ -34,7 +36,7 @@ execute_process(
   OUTPUT_STRIP_TRAILING_WHITESPACE
   )
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${llvm_config_cxxflags}")
-if (llvm_config_cxxflags STREQUAL "")
+if(llvm_config_cxxflags STREQUAL "")
   message(FATAL_ERROR "No CMAKE_CXX_FLAGS generated")
 endif()
 
@@ -50,7 +52,7 @@ execute_process(
   OUTPUT_STRIP_TRAILING_WHITESPACE
   )
 set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${llvm_config_system_libs}")
-if (llvm_config_system_libs STREQUAL "")
+if(llvm_config_system_libs STREQUAL "")
   message(FATAL_ERROR "No CMAKE_SHARED_LINKER_FLAGS generated")
 endif()
 
