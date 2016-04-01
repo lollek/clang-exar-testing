@@ -5,7 +5,6 @@ set(PROJECT_VERSION "0.1")
 
 ## Testing. Enable with `cmake -Dtest=ON`
 if (test)
-  find_package(Lit REQUIRED)
 endif()
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
