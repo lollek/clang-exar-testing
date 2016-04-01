@@ -1,0 +1,4 @@
+infile.cc:6:7: warning: Class name should not start with a lower case letter
+class badName {
+      ^
+1 warning generated.

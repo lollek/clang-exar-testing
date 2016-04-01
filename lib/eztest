@@ -4,15 +4,41 @@ from __future__ import print_function
 
 import argparse
 import sys
+import subprocess
+import re
 
 def die(msg):
     print("Test failed! Reason:", msg, file=sys.stderr)
     sys.exit(1)
 
+def clean_data(data):
+    # Remove sensitive filepath
+    data = re.sub(r'.*/(infile.cc:\d+:\d+: warning:)', r'\1', data)
+    return data
 
-def main(clang, shared_object, folder):
-    print(clang, shared_object, folder)
-    die("asd")
+def main(clang, shared_object, plugin_name, folder):
+    subprocess_arg = [
+        clang,
+        "-fsyntax-only",
+        "-Xclang",
+        "-load",
+        "-Xclang",
+        shared_object,
+        "-Xclang",
+        "-plugin",
+        "-Xclang",
+        plugin_name,
+        '%s/%s' % (folder, 'infile.cc')
+     ]
+    infile_data = subprocess.check_output(subprocess_arg, stderr=subprocess.STDOUT)
+    infile_data = clean_data(infile_data)
+
+    outfile = '%s/%s' % (folder, 'outfile.txt')
+    with open(outfile, 'r') as f:
+        outfile_data = f.read()
+
+    if infile_data != outfile_data:
+        die("Expected '%s' but found '%s'" % (outfile_data, infile_data))
 
 
 if __name__ == '__main__':
@@ -21,8 +47,10 @@ if __name__ == '__main__':
             help="Path for clang program")
     parser.add_argument("shared_object",
             help="Full path to shared object to load")
+    parser.add_argument("plugin_name",
+            help="Name of plugin to test")
     parser.add_argument("test_folder",
             help="Folder which contains an .in and .out file")
     args = parser.parse_args()
 
-    main(args.clang, args.shared_object, args.test_folder)
+    main(args.clang, args.shared_object, args.plugin_name, args.test_folder)
