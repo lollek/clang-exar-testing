@@ -30,7 +30,11 @@ def main(clang, shared_object, plugin_name, folder):
         plugin_name,
         '%s/%s' % (folder, 'infile.cc')
      ]
-    infile_data = subprocess.check_output(subprocess_arg, stderr=subprocess.STDOUT)
+    try:
+        infile_data = subprocess.check_output(subprocess_arg, stderr=subprocess.STDOUT)
+    except subprocess.CalledProcessError, e:
+        infile_data = e.output
+        pass
     infile_data = clean_data(infile_data)
 
     outfile = '%s/%s' % (folder, 'outfile.txt')
