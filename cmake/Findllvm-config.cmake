@@ -23,6 +23,9 @@ if(llvm_config_system_libs STREQUAL "")
   message(FATAL_ERROR "No CMAKE_SHARED_LINKER_FLAGS generated")
 endif()
 
+## Manually add LLVM/clang libraries.
+# There should be a better way of doing this. `llvm-config --libs seems to only
+# include the LLVM*-libraries
 set(LLVM_CONFIG_EXTRA_LIBRARIES
   LLVMMCParser
   LLVMMC

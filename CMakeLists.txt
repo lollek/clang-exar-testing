@@ -18,8 +18,4 @@ add_library(${PROJECT_NAME} SHARED
   $<TARGET_OBJECTS:exar-lower>
 )
 
-
-## Manually add LLVM/clang libraries.
-# There should be a better way of doing this. `llvm-config --libs seems to only
-# include the LLVM*-libraries
 target_link_libraries(${PROJECT_NAME} ${LLVM_CONFIG_EXTRA_LIBRARIES})
