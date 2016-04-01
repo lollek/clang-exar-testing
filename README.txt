@@ -15,9 +15,3 @@ $ clang -cc1 -load ../../Debug+Asserts/lib/libPrintFunctionNames.dylib -plugin p
 $ clang -cc1 -load ../../Debug+Asserts/lib/libPrintFunctionNames.dylib -plugin print-fns -plugin-arg-print-fns help -plugin-arg-print-fns --example-argument some-input-file.c
 $ clang -cc1 -load ../../Debug+Asserts/lib/libPrintFunctionNames.dylib -plugin print-fns -plugin-arg-print-fns -an-error some-input-file.c
 
-
-Random stuff:
-  * Installing lit:
-    * sudo apt-get install python
-    * sudo apt-get install pip
-    * pip install lit
