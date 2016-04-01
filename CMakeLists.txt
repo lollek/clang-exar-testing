@@ -34,10 +34,8 @@ if(llvm_config_system_libs STREQUAL "")
 endif()
 
 
-add_library(${PROJECT_NAME} SHARED
-  PrintFunctionNames.cpp
-  NoLowerCaseClassNames.cpp
-  )
+file(GLOB_RECURSE PROJECT_SOURCE_FILES "${PROJECT_SOURCE_DIR}/source/*.cc")
+add_library(${PROJECT_NAME} SHARED ${PROJECT_SOURCE_FILES})
 
 
 ## Manually add loads of libraries.
