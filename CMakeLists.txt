@@ -10,6 +10,11 @@ find_package(llvm-config REQUIRED)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${LLVM_CONFIG_CXXFLAGS}")
 set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${LLVM_CONFIG_LINKER_FLAGS}")
 
+## Testing. Enable with `cmake -Dtest=ON`
+if (test)
+  find_package(Lit REQUIRED)
+endif()
+
 ## All plugins here
 add_subdirectory(print-fns)
 add_subdirectory(exar-lower)
