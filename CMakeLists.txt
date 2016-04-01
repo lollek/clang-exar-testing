@@ -33,9 +33,13 @@ if(llvm_config_system_libs STREQUAL "")
   message(FATAL_ERROR "No CMAKE_SHARED_LINKER_FLAGS generated")
 endif()
 
+add_subdirectory(print-fns)
+add_subdirectory(exar-lower)
 
-file(GLOB_RECURSE PROJECT_SOURCE_FILES "${PROJECT_SOURCE_DIR}/source/*.cc")
-add_library(${PROJECT_NAME} SHARED ${PROJECT_SOURCE_FILES})
+add_library(${PROJECT_NAME} SHARED
+  $<TARGET_OBJECTS:print-fns>
+  $<TARGET_OBJECTS:exar-lower>
+  )
 
 
 ## Manually add loads of libraries.
